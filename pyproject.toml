@@ -1,0 +1,10 @@
+[project]
+name = "vector-search"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "fastapi[standard]>=0.135.1",
+    "prometheus-fastapi-instrumentator>=7.1.0",
+]
