@@ -3,8 +3,8 @@ from typing import Protocol, List
 from openai import OpenAI
 from sentence_transformers import SentenceTransformer
 
-class EmbeddingAPI(Protocol):
 
+class EmbeddingAPI(Protocol):
     @abstractmethod
     def connect(self):
         raise NotImplementedError
@@ -20,6 +20,7 @@ class EmbeddingAPI(Protocol):
     @abstractmethod
     def embed(self, text: str) -> List[float]:
         raise NotImplementedError
+
 
 class KServeEmbeddingAPI(EmbeddingAPI):
     deployment_url: str
@@ -35,8 +36,7 @@ class KServeEmbeddingAPI(EmbeddingAPI):
 
     def connect(self):
         self.openai_client = OpenAI(
-            base_url=f"{self.deployment_url}/openai/v1",
-            api_key="empty"
+            base_url=f"{self.deployment_url}/openai/v1", api_key="empty"
         )
 
     def close(self):
@@ -46,6 +46,7 @@ class KServeEmbeddingAPI(EmbeddingAPI):
     def embed(self, text: str) -> List[float]:
         response = self.openai_client.embeddings.create(input=text, model=self.model)
         return response.data[0].embedding
+
 
 class LocalModelEmbeddingAPI(EmbeddingAPI):
     embedding_model: str
@@ -59,7 +60,9 @@ class LocalModelEmbeddingAPI(EmbeddingAPI):
 
     def connect(self):
         # TODO: Add local model support
-        self.sentence_transformers_client = SentenceTransformer(self.embedding_model, trust_remote_code=True)
+        self.sentence_transformers_client = SentenceTransformer(
+            self.embedding_model, trust_remote_code=True
+        )
 
     def close(self):
         self.sentence_transformers_client = None

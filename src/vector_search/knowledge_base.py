@@ -2,15 +2,12 @@ from typing import List
 from .models import ScoredSearchComponent
 from pymilvus import (
     connections,
-    FieldSchema,
-    CollectionSchema,
-    DataType,
     Collection,
-    utility
 )
 import logging
 
 logger = logging.getLogger(__name__)
+
 
 class MilvusKnowledgeBase:
     collection_name: str
@@ -18,7 +15,12 @@ class MilvusKnowledgeBase:
     port: int
     collection: Collection
 
-    def __init__(self, collection_name: str = "knowledge_base", host: str = "localhost", port: int = 19530):
+    def __init__(
+        self,
+        collection_name: str = "knowledge_base",
+        host: str = "localhost",
+        port: int = 19530,
+    ):
         self.collection_name = collection_name
         self.host = host
         self.port = port
@@ -27,11 +29,7 @@ class MilvusKnowledgeBase:
         return self.collection is not None
 
     def connect(self):
-        connections.connect(
-            alias="default",
-            host=self.host,
-            port=self.port
-        )
+        connections.connect(alias="default", host=self.host, port=self.port)
         # Get collection and load it
         self.collection = Collection(self.collection_name)
         self.collection.load()
@@ -43,12 +41,11 @@ class MilvusKnowledgeBase:
         connections.disconnect("default")
         logging.info(f"Disconnected from Milvus collection: {self.collection_name}")
 
-    def search(self, embedded_query: List[float], limit: int = 10) -> List[ScoredSearchComponent]:
+    def search(
+        self, embedded_query: List[float], limit: int = 10
+    ) -> List[ScoredSearchComponent]:
         # Search parameters
-        search_params = {
-            "metric_type": "COSINE",
-            "params": {"nprobe": 10}
-        }
+        search_params = {"metric_type": "COSINE", "params": {"nprobe": 10}}
 
         # Perform search
         results = self.collection.search(
@@ -63,8 +60,8 @@ class MilvusKnowledgeBase:
                 "parent",
                 "accessibility",
                 "has_research",
-                "views"
-            ]
+                "views",
+            ],
         )
 
         # Format results
@@ -81,8 +78,7 @@ class MilvusKnowledgeBase:
                     has_research=hit.entity.get("has_research"),
                     created_at=hit.entity.get("created_at"),
                     updated_at=hit.entity.get("updated_at"),
-                    views=hit.entity.get("views")
+                    views=hit.entity.get("views"),
                 )
                 formatted_results.append(result)
         return formatted_results
-        
