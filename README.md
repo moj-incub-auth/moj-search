@@ -15,3 +15,12 @@ podman build -f Dockerfile -t vector_search
 ```bash
 podman run localhost/vector-search:latest
 ```
+
+
+## TODO
+[x] - pymilvus support
+[ ] - fastapi - lifecycle migration
+[x] - kserve support
+[x] - local sentence-transformers fallback
+[ ] - services wiring
+[ ] - local model support (allow trust_remote_code=False)
