@@ -3,6 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: moj-search-api
+  namespace: milvus
 spec:
   replicas: 3
   selector:
@@ -15,12 +16,14 @@ spec:
     spec:
       containers:
       - name: api
-        image: moj-search-api:latest
+        image: 'image-registry.openshift-image-registry.svc:5000/milvus/moj-search-api:latest'
         ports:
         - containerPort: 8080
+        command: ["fastapi"]
+        args: ["run", "--host", "0.0.0.0", "--port", "8080", "-e", "moj-search.main:app"]
         env:
         - name: MILVUS_HOST
-          value: "milvus-standalone"
+          value: "my-release-milvus.milvus.svc.cluster.local"
         - name: MILVUS_PORT
           value: "19530"
         - name: MILVUS_COLLECTION
@@ -46,6 +49,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: moj-search-api
+  namespace: milvus
 spec:
   type: LoadBalancer
   ports:
@@ -53,3 +57,17 @@ spec:
     targetPort: 8080
   selector:
     app: moj-search-api
+---
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: moj-search-api
+  namespace: milvus
+spec:
+  to:
+    kind: Service
+    name: moj-search-api
+    weight: 100
+  port:
+    targetPort: 8080
+  wildcardPolicy: None

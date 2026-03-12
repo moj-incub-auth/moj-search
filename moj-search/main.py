@@ -158,7 +158,7 @@ class KServeEmbeddingAPI(EmbeddingAPI):
 
     def connect(self):
         self.openai_client = OpenAI(
-            base_url=f"{self.deployment_url}/openai/v1", api_key="empty"
+            base_url=f"{self.deployment_url}/v1", api_key="empty"
         )
         logger.info(f"Connected to KServe embedding API: {self.deployment_url}")
 

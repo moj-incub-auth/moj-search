@@ -1,0 +1,37 @@
+kind: ImageStream
+apiVersion: image.openshift.io/v1
+metadata:
+  name: moj-search-api
+  namespace: milvus
+spec:
+  lookupPolicy:
+    local: false
+---
+kind: BuildConfig
+apiVersion: build.openshift.io/v1
+metadata:
+  name: moj-search-api-build
+  namespace: milvus
+  labels:
+    app: moj-search-api
+spec:
+  nodeSelector: null
+  output:
+    to:
+      kind: ImageStreamTag
+      namespace: milvus
+      name: 'moj-search-api:latest'
+  successfulBuildsHistoryLimit: 5
+  failedBuildsHistoryLimit: 5
+  strategy:
+    type: Docker
+    dockerStrategy:
+      dockerfilePath: Dockerfile
+  source:
+    type: Git
+    git:
+      uri: 'https://github.com/moj-incub-auth/moj-search.git'
+      ref: main
+  triggers:
+    - type: ConfigChange
+  runPolicy: Serial
