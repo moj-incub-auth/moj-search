@@ -46,4 +46,4 @@ USER nonroot
 # Uses `fastapi dev` to enable hot-reloading when the `watch` sync occurs
 # Uses `--host 0.0.0.0` to allow access from outside the container
 # Note in production, you should use `fastapi run` instead
-CMD ["uv", "run", "fastapi", "run", "--host", "0.0.0.0", "src/vector_search"]
+CMD ["uv", "run", "--offline", "fastapi", "run", "--host", "0.0.0.0", "-e", "moj-search.main:app"]

@@ -1,26 +1,20 @@
-# Vector Search
+# Moj Search
 
 ## Run Locally
 ```bash
-uv run fastapi dev src/vector_search
+uv run fastapi dev -e moj-search.main:app
 ```
-
 
 ## Build Local Image
 ```bash
-podman build -f Dockerfile -t vector_search
+podman build -f Dockerfile -t moj-search
 ```
 
 ## Run Local Image
 ```bash
-podman run localhost/vector-search:latest
+podman run localhost/moj-search:latest
 ```
 
 
 ## TODO
-[x] - pymilvus support
-[ ] - fastapi - lifecycle migration
-[x] - kserve support
-[x] - local sentence-transformers fallback
-[ ] - services wiring
 [ ] - local model support (allow trust_remote_code=False)
