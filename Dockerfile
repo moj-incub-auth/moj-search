@@ -41,9 +41,12 @@ ENTRYPOINT []
 # Use the non-root user to run our application
 USER nonroot
 
+# Expose the API port
+EXPOSE 8080
+
 # Run the FastAPI application by default
 # Uses `uv run` to sync dependencies on startup, respecting UV_NO_DEV
 # Uses `fastapi dev` to enable hot-reloading when the `watch` sync occurs
 # Uses `--host 0.0.0.0` to allow access from outside the container
 # Note in production, you should use `fastapi run` instead
-CMD ["uv", "run", "--offline", "fastapi", "run", "--host", "0.0.0.0", "-e", "moj-search.main:app"]
+CMD ["fastapi", "run", "--host", "0.0.0.0", "--port", "8080", "-e", "moj-search.main:app"]
