@@ -18,3 +18,10 @@ podman run localhost/moj-search-api:latest
 
 ## TODO
 [ ] - local model support (allow trust_remote_code=False)
+[ ] - 1024 Dimension Size
+[ ] - Why does deployment.yaml need to explicitely set the command?
+[ ] - Deployment references image stream
+[ ] - Multi-stage image build - libraries, application
+[ ] - Metrics: LLM Hits (time to first token), Req/S
+[ ] - Traces OLTP Traces (from MOJ)?
+[ ] - Use OpenTelemetry https://github.com/open-telemetry/opentelemetry-python-contrib/tree/main/instrumentation/opentelemetry-instrumentation-fastapi
